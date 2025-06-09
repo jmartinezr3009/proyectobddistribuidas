@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Análisis de Ventas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+
+    <!-- Botón para regresar -->
+    <div class="d-flex justify-content-between mb-4">
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Volver al Panel</a>
+        <h2 class="text-center">Análisis de Ventas</h2>
+    </div>
+
+    <!-- Sección de Total de Ventas -->
+    <div class="card p-4 shadow mb-3">
+        <h4 class="text-center">Total de Ventas</h4>
+        <p class="text-center fs-4">💰 Total generado: <strong>${{ total_ventas }}</strong></p>
+    </div>
+
+    <!-- Sección de Ventas por Día -->
+    <div class="card p-4 shadow mb-3">
+        <h4 class="text-center">Ventas por Día</h4>
+        {% if ventas_por_dia %}
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Total Vendido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas_por_dia %}
+                    <tr>
+                        <td>{{ venta.fecha|date:"Y-m-d" }}</td>
+                        <td>${{ venta.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center text-muted">No hay datos de ventas recientes.</p>
+        {% endif %}
+    </div>
+
+    <!-- Sección de Productos Más Vendidos -->
+    <div class="card p-4 shadow mb-3">
+        <h4 class="text-center">Productos Más Vendidos</h4>
+        {% if productos_mas_vendidos %}
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Cantidad Vendida</th>
+                    <th>Ventas Totales</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos_mas_vendidos %}
+                <tr>
+                    <td>{{ producto.codigo_barras }}</td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.cantidad_vendida }}</td>
+                    <td>
+                        {% for p in productos_con_total_ventas %}
+                            {% if p.nombre == producto.nombre %}
+                                ${{ p.total_ventas_producto }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center text-muted">No hay ventas registradas.</p>
+        {% endif %}
+    </div>
+
+    <!-- Sección de Cajeros con Más Ventas -->
+    <div class="card p-4 shadow mb-3">
+        <h4 class="text-center">Cajeros con Más Ventas</h4>
+        {% if cajeros_mas_ventas %}
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Cajero</th>
+                    <th>Ventas Realizadas</th>
+                    <th>Total Vendido</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cajero in cajeros_mas_ventas %}
+                <tr>
+                    <td>{{ cajero.nombre }}</td>
+                    <td>{{ cajero.ventas }}</td>
+                    <td>${{ cajero.total_vendido }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center text-muted">No hay información de cajeros.</p>
+        {% endif %}
+    </div>
+
+    <div class="card p-4 shadow mb-3">
+        <h4 class="text-center">Generar Reporte PDF</h4>
+        <form method="GET" action="{% url 'reporte_pdf' %}" class="d-flex flex-column align-items-center">
+            <div class="mb-3">
+                <label for="fecha_inicio" class="form-label">Fecha Inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="fecha_fin" class="form-label">Fecha Fin:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">📄 Generar Reporte PDF</button>
+        </form>
+    </div>  
+
+    
+
+</body>
+</html>
