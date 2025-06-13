@@ -3,8 +3,30 @@ from django.db import models
 # Create your models here.
 from django.contrib.auth.hashers import make_password, check_password
 
-##############################
-class Usuario(models.Model):
+##############################from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+# from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+
+
+class UsuarioManager(BaseUserManager):
+    def create_user(self, username, email, password=None, rol='Cajero'):
+        if not email:
+            raise ValueError('El email es obligatorio')
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, rol=rol)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, password=None):
+        user = self.create_user(username, email, password, rol='Administrador')
+        user.is_superuser = True
+        user.is_staff = True
+        user.save(using=self._db)
+        return user
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
     ROLES = [
         ("Administrador", "Administrador"),
         ("Cajero", "Cajero"),
@@ -12,9 +34,16 @@ class Usuario(models.Model):
 
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=255)  # Guardamos la contraseña encriptada
     email = models.EmailField(unique=True)
     rol = models.CharField(max_length=15, choices=ROLES, default="Cajero")
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    objects = UsuarioManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     def set_password(self, raw_password):
         """Encripta la contraseña antes de guardarla."""
