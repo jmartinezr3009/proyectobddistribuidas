@@ -67,7 +67,7 @@ def gestionar_usuarios(request):
             messages.error(request, "Las contraseñas no coinciden.")
         else:
             if Usuario.objects.filter(username=username).exists():
-                messages.error(request, "El usuario ya existe.")
+                messages.success(request, "Login exitoso.")
             else:
                 nuevo_usuario = Usuario(
                     username=username,
@@ -111,9 +111,11 @@ def gestionar_productos(request):
             producto.precio = precio
             producto.stock = stock
             producto.save()
+            messages.success(request, "Producto actualizado correctamente.")
         else:  # Si se está agregando un producto nuevo
             with connection.cursor() as cursor:
                 cursor.callproc('crear_producto', [codigo_barras, nombre, precio, stock])
+                messages.success(request, "Producto agregado correctamente.")
         return redirect("Gestionproductos")
 
     productos = Producto.objects.all()
@@ -337,15 +339,15 @@ def admin_dashboard(request):
         cursor.execute("SELECT * FROM productos_bajo_stock")
         resultados = cursor.fetchall()
 
-    productos = []
+    producto = []
     for row in resultados:
-        productos.append({
+        producto.append({
             "codigo_barras": row[0],
             "nombre": row[1],
             "stock": row[2],
         })
 
-    return render(request, "admin_dashboard.html", {"productos_bajo_stock": productos})
+    return render(request, "admin_dashboard.html", {"productos_bajo_stock": producto})
 
 
 def generar_reporte_pdf(request):
