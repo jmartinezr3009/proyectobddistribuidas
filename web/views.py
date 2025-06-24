@@ -125,6 +125,7 @@ def gestionar_productos(request):
 def eliminar_producto(request, codigo_barras):
     producto = Producto.objects.get(codigo_barras=codigo_barras)
     producto.delete()
+    messages.success(request, "Producto eliminado correctamente.")
     return redirect("Gestionproductos")
 
 
