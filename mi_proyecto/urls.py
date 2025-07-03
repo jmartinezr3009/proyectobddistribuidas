@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from web.views import login_view
+from web.views import login_view, status_producto, status_usuario
 from web.views import gestionar_usuarios,eliminar_usuario
 from web.views import gestionar_productos, eliminar_producto,gestionar_inventario,punto_de_venta, eliminar_de_canasta, finalizar_venta
 from web.views import consultar_inventario,admin_dashboard
@@ -44,6 +44,9 @@ urlpatterns = [
     path("abrir-lector-codigos/", abrir_lector_codigos, name="abrir_lector_codigos"),
     path('escanear/', escanear_codigo, name='escanear_codigo'),
     path('reporte/', generar_reporte_pdf, name='reporte_pdf'),
+    path('status-producto/<str:codigo_barras>/', status_producto, name='status_producto'),
+    path('status-usuario/<int:user_id>/', status_usuario, name='status_usuario'),
+
     path('reset_password/', auth_views.PasswordResetView.as_view(
         template_name='registration/password_reset_form.html'
     ), name='password_reset'),

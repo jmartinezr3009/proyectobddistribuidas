@@ -39,6 +39,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    is_active = models.IntegerField(default=1)  # 1 para activo, 0 para inactivo
 
     objects = UsuarioManager()
 
@@ -63,7 +64,12 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     precio = models.FloatField()
     stock = models.IntegerField()
+    is_active = models.IntegerField(default=0)  # 1 para activo, 0 para inactivo
     
+    def status_producto(self, is_activo):
+        """Actualiza el stock sumando o restando una cantidad."""
+        self.is_active = is_activo
+        self.save()
 
     def actualizar_stock(self, cantidad):
         """Actualiza el stock sumando o restando una cantidad."""
@@ -91,7 +97,7 @@ class Producto(models.Model):
         return Producto.objects.all()
 
     def __str__(self):
-        return f"{self.codigo_barras} - {self.nombre} - ${self.precio} - Stock: {self.stock}"
+        return f"{self.codigo_barras} - {self.nombre} - ${self.precio} - Stock: {self.stock} "
     
 ########################
 class Venta(models.Model):

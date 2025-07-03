@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel de Administrador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 <body class="container mt-5">
     
@@ -12,8 +13,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container-fluid">
             <h2 class="navbar-brand">Panel de Administrador</h2>
-            <div class="d-flex">
-                <a href="{% url 'login' %}" class="btn btn-danger">Cerrar Sesión</a>
+            <div class="d-flex ">
+                <a href="{% url 'login' %}" class="btn btn-danger  d-flex align-items-center">Cerrar Sesión 
+                    <span class="material-symbols-outlined">exit_to_app</span>
+                </a>
             </div>
         </div>
     </nav>
@@ -24,7 +27,9 @@
             <div class="card p-4 shadow text-center">
                 <h4>Gestión de Inventario</h4>
                 <p>Consulta y administra el stock de los productos.</p>
-                <a href="{% url 'Gestioninventario' %}" class="btn btn-primary w-100">Ir a Inventario</a>
+                <a href="{% url 'Gestioninventario' %}" class="btn btn-primary w-100 d-flex justify-content-center">Ir a Inventario
+                    <span class="material-symbols-outlined">arrow_forward_ios</span>
+                </a>
             </div>
         </div>
 
@@ -33,7 +38,9 @@
             <div class="card p-4 shadow text-center">
                 <h4>Gestión de Productos</h4>
                 <p>Agrega, modifica o elimina productos de la tienda.</p>
-                <a href="{% url 'Gestionproductos' %}" class="btn btn-primary w-100">Ir a Productos</a>
+                <a href="{% url 'Gestionproductos' %}" class="btn btn-primary w-100 d-flex justify-content-center">Ir a Productos
+                    <span class="material-symbols-outlined">arrow_forward_ios</span>
+                </a>
             </div>
         </div>
         <p></p>
@@ -43,7 +50,9 @@
             <div class="card p-4 shadow text-center">
                 <h4>Analisis de Ventas</h4>
                 <p>Analisa la ventas de la tienda.</p>
-                <a href="{% url 'AnalisisVentas' %}" class="btn btn-primary w-100">Ir a Ventas</a>
+                <a href="{% url 'AnalisisVentas' %}" class="btn btn-primary w-100 d-flex justify-content-center">Ir a Ventas
+                     <span class="material-symbols-outlined">arrow_forward_ios</span>
+                </a>
             </div>
         </div>
         
@@ -52,7 +61,9 @@
             <div class="card p-4 shadow text-center">
                 <h4>Gestión de Usuarios</h4>
                 <p>Registra, edita o elimina usuarios.</p>
-                <a href="{% url 'Gestionusuarios' %}" class="btn btn-primary w-100">Ir a Usuarios</a>
+                <a href="{% url 'Gestionusuarios' %}" class="btn btn-primary w-100 d-flex justify-content-center">Ir a Usuarios
+                    <span class="material-symbols-outlined">arrow_forward_ios</span>
+                </a>
             </div>
         </div>        
     </div>

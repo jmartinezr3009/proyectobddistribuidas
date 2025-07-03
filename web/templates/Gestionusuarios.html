@@ -85,10 +85,18 @@
                                 <td>{{ usuario.email }}</td>
                                 <td>{{ usuario.rol|default:"No asignado" }}</td>
                                 <td>
-                                    <a href="{% url 'eliminar_usuario' usuario.id %}" class="btn btn-danger btn-sm" 
+                                    <!-- <a href="{% url 'eliminar_usuario' usuario.id %}" class="btn btn-danger btn-sm" 
                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                         Eliminar
-                                    </a>
+                                    </a> -->
+                                     <a href="{% url 'status_usuario'  usuario.id %}"
+                                        class="btn {% if usuario.is_active %}btn-danger{% else %}btn-success{% endif %} btn-sm">
+                                        {% if usuario.is_active %}
+                                        Deshabilitar
+                                        {% else %}
+                                        Habilitar
+                                        {% endif %}
+                                     </a>
                                 </td>
                             </tr>
                             {% endfor %}

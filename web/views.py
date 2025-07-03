@@ -96,6 +96,17 @@ def eliminar_usuario(request, user_id):
 
     return redirect("Gestionusuarios")
 
+def status_usuario(request, user_id):
+    try:
+        usuario = Usuario.objects.get(id=user_id)
+        usuario.is_active = not usuario.is_active  # Cambia el estado activo/inactivo
+        usuario.save()
+        status = "activo" if usuario.is_active else "inactivo"
+        messages.success(request, f"Usuario {status} correctamente.")
+    except Usuario.DoesNotExist:
+        messages.error(request, "El usuario no existe o ya ha sido eliminado.")
+
+    return redirect("Gestionusuarios")
 
 def gestionar_productos(request):
     if request.method == "POST":
@@ -126,6 +137,14 @@ def eliminar_producto(request, codigo_barras):
     producto = Producto.objects.get(codigo_barras=codigo_barras)
     producto.delete()
     messages.success(request, "Producto eliminado correctamente.")
+    return redirect("Gestionproductos")
+
+def status_producto(request, codigo_barras):
+    producto = Producto.objects.get(codigo_barras=codigo_barras)
+    producto.is_active = not producto.is_active  # Cambia el estado activo/inactivo
+    producto.save()
+    status = "activo" if producto.is_active else "inactivo"
+    messages.success(request, f"Producto {status} correctamente.")
     return redirect("Gestionproductos")
 
 

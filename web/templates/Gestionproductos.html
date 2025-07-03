@@ -85,7 +85,16 @@
                                 <td>{{ producto.stock }}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" onclick="editarProducto('{{ producto.codigo_barras }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.stock }}')">Editar</button>
-                                    <a href="{% url 'eliminar_producto' producto.codigo_barras %}" class="btn btn-danger btn-sm">Eliminar</a>
+
+                                    <!-- <a href="{% url 'eliminar_producto' producto.codigo_barras %}" class="btn btn-danger btn-sm">Eliminar</a> -->
+                                <a href="{% url 'status_producto' producto.codigo_barras %}"
+                                    class="btn {% if producto.is_active %}btn-danger{% else %}btn-success{% endif %} btn-sm">
+                                    {% if producto.is_active %}
+                                    Deshabilitar
+                                    {% else %}
+                                    Habilitar
+                                    {% endif %}
+                                </a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -128,9 +137,11 @@
             document.getElementById("btn-submit").innerText = "Actualizar Producto";
 
             // Deshabilitar edición de stock
-            document.getElementById("stock").setAttribute("readonly", "readonly");
+            document.getElementById("stock").setAttribute("readonly", "readonly"); 
+        }
 
-
+        function toggleEstadoProducto(codigo, estado) {
+        console.log("Código del producto:", codigo, 'Estado: ', estado);
             
         }
 
