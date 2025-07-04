@@ -40,11 +40,15 @@ def login_view(request):
                 request.session["usuario_id"] = usuario.id  # Guardar el ID en la sesión
 
                 # Redirigir según el rol
-                if usuario.rol == "Administrador":
+                if usuario.rol == "Administrador" and usuario.is_active == 1:  # Verifica si es administrador y está activo
                     return redirect("admin_dashboard")  # Redirige al panel de admin
-                elif usuario.rol == "Cajero":
+                elif usuario.rol == "Cajero" and usuario.is_active == 1:  # Verifica si es cajero y está activo
                     return redirect("caja")  # Redirige al panel de cajero
             else:
+                if usuario.is_active == 0:
+                    messages.error(request, "Usuario inactivo. Contacte al administrador.")
+                    return render(request, "login.html", {"error": "Usuario inactivo. Contacte al administrador."})
+                messages.error(request, "Contraseña incorrecta.")
                 return render(request, "login.html", {"error": "Contraseña incorrecta"})
 
         except Usuario.DoesNotExist:
