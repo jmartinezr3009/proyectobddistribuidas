@@ -71,12 +71,12 @@ class Producto(models.Model):
         self.is_active = is_activo
         self.save()
 
-    def actualizar_stock(self, cantidad):
+    def actualizar_stock(self, cantidad, is_active):
         """Actualiza el stock sumando o restando una cantidad."""
         self.stock += cantidad
         self.save()
 
-    def agregar_producto(self, cantidad):
+    def agregar_producto(self, cantidad, is_active):
         """Aumenta el stock de un producto existente."""
         self.actualizar_stock(cantidad)
 
@@ -97,7 +97,7 @@ class Producto(models.Model):
         return Producto.objects.all()
 
     def __str__(self):
-        return f"{self.codigo_barras} - {self.nombre} - ${self.precio} - Stock: {self.stock} "
+        return f"{self.codigo_barras} - {self.nombre} - ${self.precio} - Stock: {self.stock}  - {self.is_active}"
     
 ########################
 class Venta(models.Model):

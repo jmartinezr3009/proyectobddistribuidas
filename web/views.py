@@ -44,11 +44,10 @@ def login_view(request):
                     return redirect("admin_dashboard")  # Redirige al panel de admin
                 elif usuario.rol == "Cajero" and usuario.is_active == 1:  # Verifica si es cajero y está activo
                     return redirect("caja")  # Redirige al panel de cajero
-            else:
-                if usuario.is_active == 0:
+                elif usuario.is_active == 0:
                     messages.error(request, "Usuario inactivo. Contacte al administrador.")
                     return render(request, "login.html", {"error": "Usuario inactivo. Contacte al administrador."})
-                messages.error(request, "Contraseña incorrecta.")
+            else:                
                 return render(request, "login.html", {"error": "Contraseña incorrecta"})
 
         except Usuario.DoesNotExist:
@@ -157,16 +156,15 @@ def gestionar_inventario(request):
         codigo_barras = request.POST.get("codigo_barras")
         cantidad = int(request.POST.get("cantidad", 0))
         accion = request.POST.get("accion")  # "agregar" o "eliminar"
-        is_active = request.POST.get("is_active")  # Por defecto activo
-        
+        is_active = Producto.objects.get(codigo_barras=codigo_barras).is_active  # Por defecto activo
 
         if cantidad >= 0:
             try:
                 with connection.cursor() as cursor:
                     if accion == "agregar" and is_active == 1:
-                        cursor.callproc('actualizar_stock_producto', [codigo_barras, cantidad])
+                        cursor.callproc('actualizar_stock_producto', [codigo_barras, cantidad,])
                         messages.success(request, f"Se agregaron {cantidad} unidades al stock de {codigo_barras}.")
-                    elif accion == "eliminar":
+                    elif accion == "eliminar" and is_active == 1:
                         cursor.callproc('actualizar_stock_producto', [codigo_barras, -cantidad])
                         messages.success(request, f"Se eliminaron {cantidad} unidades del stock de {codigo_barras}.")
                     else:
@@ -506,6 +504,4 @@ def generar_reporte_pdf(request):
     p.showPage()
     p.save()
     return response
-
-
 
