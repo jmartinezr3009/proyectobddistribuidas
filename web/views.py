@@ -157,16 +157,21 @@ def gestionar_inventario(request):
         codigo_barras = request.POST.get("codigo_barras")
         cantidad = int(request.POST.get("cantidad", 0))
         accion = request.POST.get("accion")  # "agregar" o "eliminar"
+        is_active = request.POST.get("is_active")  # Por defecto activo
+        
 
         if cantidad >= 0:
             try:
                 with connection.cursor() as cursor:
-                    if accion == "agregar":
+                    if accion == "agregar" and is_active == 1:
                         cursor.callproc('actualizar_stock_producto', [codigo_barras, cantidad])
                         messages.success(request, f"Se agregaron {cantidad} unidades al stock de {codigo_barras}.")
                     elif accion == "eliminar":
                         cursor.callproc('actualizar_stock_producto', [codigo_barras, -cantidad])
                         messages.success(request, f"Se eliminaron {cantidad} unidades del stock de {codigo_barras}.")
+                    else:
+                        messages.error(request, "Acción no válida o producto inactivo.")
+                        return redirect("Gestioninventario")
             except Exception as e:
                 messages.error(request, f"Error al actualizar stock: {str(e)}")
 

@@ -84,7 +84,7 @@
                                 <td>${{ producto.precio }}</td>
                                 <td>{{ producto.stock }}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm" onclick="editarProducto('{{ producto.codigo_barras }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.stock }}')">Editar</button>
+                                    <button class="btn btn-warning btn-sm" onclick="editarProducto('{{ producto.codigo_barras }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.stock }}', '{{ producto.is_active }}')">Editar</button>
 
                                     <!-- <a href="{% url 'eliminar_producto' producto.codigo_barras %}" class="btn btn-danger btn-sm">Eliminar</a> -->
                                 <a href="{% url 'status_producto' producto.codigo_barras %}"
@@ -127,7 +127,15 @@
         });
 
         // Función para editar productos
-        function editarProducto(codigo, nombre, precio, stock) {
+        function editarProducto(codigo, nombre, precio, stock, is_active) {
+            if(is_active == 0){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se puede editar el producto porque está inactivo.',
+                });
+                return;
+            }
             document.getElementById("codigo_barras").value = codigo;
             document.getElementById("nombre").value = nombre;
             document.getElementById("precio").value = precio;
